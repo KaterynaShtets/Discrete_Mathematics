@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Lab #3</title>
+</head>
+<body>
+<h1>Task #1</h1>
+<p>Enter an element of set:</p>
+<p><input type="text" id="el_in" onchange="input()"></p>
+<p>Enter K:<input type="text" id="k_in" onchange="k_input()"></p>
+<p>Set:<output id="vvod"></output></p>
+<p>K:<output id="k_out"></output></p>
+<button id="1" onclick="document.getElementById('out').innerHTML = task_1()">calculate</button>
+<p>Time: <output id="time1"></output></p>
+<p>Combinations:<output id="out"></output></p>
+<h1>Task #2</h1>
+<p>Enter an element of set:</p>
+<p><input type="text" id="el_in_2" onchange="input_2()"></p>
+<p>Set:<output id="vvod2"></output></p>
+<button id="2" onclick="document.getElementById('out_2').innerHTML = task_2()">Calculate</button>
+<p>Time: <output id="time2"></output></p>
+<p>Combinations:<output id="out_2"></output></p>
+<script src="main.js"></script>
+</body>
+</html>
+

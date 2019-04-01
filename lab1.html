@@ -1,0 +1,197 @@
+<script>
+  function Union(A, B) // A и B - упорядоченные массивы.
+  // A и B - упорядоченные массивы.
+  {
+    var N = A.length;
+    var M = B.length;
+    var C = [];
+
+    for (var i = 0, j = 0, k = 0; k < N + M; k++) // Сливаем массивы A и B в массив С,
+    {
+      if (i == N) {
+        C[k] = B[j++];
+        continue;
+      } //   сохраняя упорядоченность.
+      if (j == M) {
+        C[k] = A[i++];
+        continue;
+      }
+
+      if (A[i] < B[j]) {
+        C[k] = A[i++]
+      } else {
+        C[k] = B[j++]
+      };
+    }
+
+    for (var i = 1, j = C[0], k = 1; i < N + M; i++) // Удаляем дубли в упорядоченном
+    {
+      if (C[i] !== j) //  массиве С.
+      {
+        C[k++] = C[i];
+        j = C[i];
+      }
+    }
+    C.length = k;
+    // На выходе массив C, состоящий из элементов
+    return C; //  массивов A и B, без повторов.
+  }
+  var A = [1, 2, 3];
+  var B = [2, 3, 4, 5];
+  console.log(Union(A, B))
+
+  function MultiUnion(k, A) // При вызовах всегда полагать k=0. А - это двумерный (!)
+  { //  массив, элементы которого A[ i ] - упорядоченные массивы,
+    var n = A.length; //  которые нужно объединить.
+    if (k == n - 2)
+      return Union(A[n - 2], A[n - 1]); //
+    else
+      return Union(A[k], MultiUnion(k + 1, A));
+    // На выходе одномерный массив, состоящий из элементов A[ i ]
+  } //   входного 2d-массива A, без повторов.
+  console.log(MultiUnion(0, [
+    [3, 4],
+    [-9, -2, 0, 1],
+    [5, 6, 7],
+    [-8, -7]
+  ]))
+  // Пример вызова этой функции:  MultiUnion( 0,[[3,4],[-9,-2,0,1],[5,6,7],[-8,-7]] ).
+  //          На выходе получим:  [-9,-8,-7,-2,0,1,3,4,5,6,7].
+  function Intersection(A, B) { //пересечение неупорядоченніх массивов
+    var m = A.length;
+    var n = B.length;
+    var c = 0;
+    var C = [];
+    for (var i = 0; i < m; i++) {
+      var j = 0;
+      var k = 0;
+      while (B[j] !== A[i] && j < n) j++;
+      while (C[k] !== A[i] && k < c) k++;
+      if (j != n && k == c) C[c++] = A[i];
+    }
+    return C;
+  }
+  console.log(Intersection([1, 2, 3, 4], [3, 4, 5, 6]))
+
+  function MultiIntersection(k, A) // При вызовах всегда полагать k=0. А - это двумерный (!)
+  { //  массив, элементы которого A[ i ] - также массивы,
+    var n = A.length; //  пересечение которых нужно найти.
+    if (k == n - 2)
+      return Intersection(A[n - 2], A[n - 1]); // Функцию Intersection см. выше.
+    else
+      return Intersection(A[k], MultiIntersection(k + 1, A));
+  }
+
+  console.log(MultiIntersection(0, [
+    [3, 4, 5],
+    [3, 6, 7]
+  ]))
+
+  function Difference(A, B) {
+    var M = A.length;
+    var N = B.length;
+    var c = 0;
+    var C = [];
+    for (var i = 0; i < M; i++) {
+      var j = 0;
+      var k = 0;
+      while (B[j] !== A[i] && j < N) j++;
+      while (C[k] !== A[i] && k < c) k++;
+      if (j == N && k == c) C[c++] = A[i];
+    }
+    return C;
+  }
+  console.log(Difference([0, 1, 2, 3, 4], [0, 2, 4, 6]));
+
+  function MultiDifference(k, A) // При вызовах всегда полагать k=0. А - это двумерный (!)
+  { //  массив, элементы которого A[ i ] - упорядоченные массивы,
+    var n = A.length; //  разность которых нужно найти.
+    if (k == n - 2)
+      return Difference(A[n - 2], A[n - 1]); // 
+    else
+      return Difference(A[k], MultiDifference(k + 1, A));
+  } // На выходе массив A[0],в котором останутся только те элементы (без дублей), 
+  //  которые не совпадают с элементами массивов A[1],...,A[n-1].
+
+
+  console.log(MultiDifference(0, [
+    [1, 2, 3, 7],
+    [2, 3, 4],
+    [4, 5]
+  ]));
+
+
+  function Compliment(A, B) // A и B - упорядоченные массивы.
+  {
+    var N = A.length;
+    var M = B.length;
+
+    for (var i = 1, j = 1, k = A[0]; i < N; i++) // Удаляем повторяющиеся элементы
+    {
+      if (A[i] !== k) // в сортированных массивах А и B.
+      {
+        A[j++] = A[i];
+        k = A[i];
+      }
+    }
+    A.length = j;
+
+    for (var i = 1, j = 1, k = B[0]; i < M; i++) {
+      if (B[i] !== k) {
+        B[j++] = B[i];
+        k = B[i];
+      }
+    }
+    B.length = j; // end
+
+    var N = A.length;
+    var M = B.length;
+    var C = [];
+
+    for (var i = 0, j = 0, k = 0; k < N + M; k++) // Сливаем массивы A и B в массив С,
+    {
+      if (i == N) {
+        C[k] = B[j++];
+        continue;
+      } //  сохраняя упорядоченность.
+      if (j == M) {
+        C[k] = A[i++];
+        continue;
+      }
+      if (A[i] < B[j]) {
+
+        C[k] = A[i++]
+
+      } else {
+        C[k] = B[j++]
+      }
+      var N = C.length;
+
+      for (var i = 1, j = 0, t; i < N + 1; i++) // Сдвигаем в начало массива С элементы,
+      {
+        if (C[i - 1] === C[i]) t = C[i - 1]; //  которые не имеют дубли,
+        if (C[i - 1] !== t) C[j++] = C[i - 1]; //  их будет j-штук.
+      } // Оставляем в C j-элементов,
+      C.length = j; //  не имеющих дублей.
+
+      return C; // На выходе массив C, состоящий из элементов множеств A и B,
+      //  которых не присутствуют одновременное в обоих массивах A и B.
+    }
+    //  без повторяющихся элементов.
+    console.log(Compliment([1, 2, 3], [1, 2, 3, 4, 5, 6]))
+
+    function MultiCompliment(k, A) // При вызовах всегда полагать k=0. А - это двумерный (!)
+    { //  массив, элементы которого A[ i ] - упорядоченные массивы,
+      var n = A.length; //  симметрическую разность которых нужно найти.
+      if (k == n - 2)
+        return Compliment(A[n - 2], A[n - 1]); // .
+      else
+        return Compliment(A[k], MultiCompliment(k + 1, A));
+    }
+
+    console.log(MultiCompliment(0, [
+      [1, 2, 3],
+      [4, 5, 6],
+      [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    ]))
+</script>

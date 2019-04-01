@@ -1,0 +1,103 @@
+ <script type="text/javascript">
+
+  var formula=prompt('Введите выражение в виде польской нотации,например: xy^x~zvn^. Пожалуйста в вводе используйте такие переменные: x,y,n,k',' ');
+ 
+
+if(formula.indexOf('x')!=-1){
+ formula = formula.replace(/x/g, prompt("значение x", ""));
+}
+if(formula.indexOf('y')!=-1){
+ formula = formula.replace(/y/g, prompt("значение y", ""));
+}
+ if(formula.indexOf('z')!=-1){
+ formula= formula.replace(/z/g, prompt("значение z", ""));
+}
+if(formula.indexOf('n')!=-1){
+ formula= formula.replace(/n/g, prompt("значение n", ""));
+}
+if(formula.indexOf('k')!=-1){
+ formula= formula.replace(/k/g, prompt("значение k", ""));
+  }
+ var note = [];
+ var str_arr = [];
+str_arr = formula.split("")
+ function converter(arr) {
+  var stack = [];
+  var brakes = [];
+
+  for (i = 0; i < arr.length; i++) {
+    if (arr[i] == '~') {
+      note.push(arr[i]);
+    }
+    else if ((arr[i] == 'v') || (arr[i] == '^')) {
+      stack.push(arr[i]);
+    }
+    else if (arr[i] == '(') {
+      stack.push(arr[i]);
+    }
+    else if (arr[i] == ')') {
+      stack.push(arr[i]);
+      brakes = stack.splice(stack.lastIndexOf('(') + 1, (stack.indexOf(')') - stack.lastIndexOf('(') - 1));
+      for (k = brakes.length - 1; k >= 0; k--) {
+        note.push(brakes[k]);
+      }
+      stack.splice(stack.lastIndexOf('('), 1);
+      stack.splice(stack.lastIndexOf(')'), 1);
+    } else {
+      note.push(arr[i]);
+    }
+  }
+  for (i = stack.length - 1; i >= 0; i--) {
+    note.push(stack[i]);
+  }
+  return(note);
+}
+
+  function boolean(str) {
+    var stack=[];
+var strr=note.join('')
+var res;
+    for (var i = 0; i < strr.length; i++) {
+      if (!isNaN(strr[i])) {
+        stack.push(+strr[i])
+      }
+      switch (str[i]) {
+        case '^':
+          var b=+stack.pop();
+          var a = +stack.pop();
+          stack.push(conjunction(a, b));
+          break;
+        case 'v':
+          var b=+stack.pop();
+          var a = +stack.pop();
+          stack.push(disjunction(a, b));
+          break;
+        case '~':
+          var a = +stack.pop();
+          stack.push(compliment(a));
+          break;
+      
+    }
+  }}
+  function conjunction() {
+    res = Math.min(...arguments);
+    return res
+  }
+  function disjunction(a, b) {
+     res = Math.max(...arguments)
+     return res
+  }
+  function compliment(a) {
+    res =(a+1)%2;
+    return res
+  }
+converter(str_arr)
+ boolean(note)
+  alert('вы ввели формулу ' + formula + ' ' + 'ответ ' + res)
+//boolean('01^1~v');//0
+//console.log(res);
+//boolean('01^0~v')//1
+//console.log(res);
+//boolean('01~v0~1v0~^^~');//1
+//console.log(res)
+</script>
